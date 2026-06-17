@@ -1,0 +1,76 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+}
+
+div{
+    width: 20vw;
+    height: 20vw;
+    max-width: 300px;
+    max-height: 300px;
+    min-width: 100px;
+    min-height: 100px;
+
+    background: radial-gradient(
+        rgb(216,6,6),
+        rgb(0,236,63),
+        rgb(126,6,255)
+    );
+
+    border: 10px solid white;
+
+    animation: xyz 6s ease-in-out infinite;
+}
+
+@keyframes xyz{
+
+    0%{
+        transform: translateX(-200px)
+                   rotate(0deg)
+                   scale(0.5);
+        border-radius: 0%;
+        background: radial-gradient(red, yellow, purple);
+    }
+
+    25%{
+        transform: translateX(200px)
+                   rotate(90deg)
+                   scale(1);
+        border-radius: 50%;
+        background: radial-gradient(cyan, white, blue);
+    }
+
+    50%{
+        transform: translateX(-200px)
+                   rotate(180deg)
+                   scale(1.5);
+        border-radius: 0%;
+        background: radial-gradient(green, pink, orange);
+    }
+
+    75%{
+        transform: translateX(200px)
+                   rotate(270deg)
+                   scale(1);
+        border-radius: 50%;
+        background: radial-gradient(yellow, red, blue);
+    }
+
+    100%{
+        transform: translateX(-200px)
+                   rotate(360deg)
+                   scale(0.5);
+        border-radius: 0%;
+        background: radial-gradient(rgb(228,253,0), red, rgb(0,60,255));
+    }
+}

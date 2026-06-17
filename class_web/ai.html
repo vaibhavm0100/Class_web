@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon Clone</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --amazon-dark:   #131921;
+    --amazon-mid:    #232f3e;
+    --amazon-orange: #FF9900;
+    --amazon-yellow: #FFD814;
+    --amazon-blue:   #007185;
+    --amazon-red:    #CC0C39;
+    --amazon-green:  #067D62;
+    --bg-light:      #EAEDED;
+    --bg-white:      #FFFFFF;
+    --text-primary:  #0F1111;
+    --text-muted:    #565959;
+    --text-link:     #007185;
+    --border:        #D5D9D9;
+    --star:          #FF9900;
+    --radius-sm:     4px;
+    --radius-md:     8px;
+    --shadow-sm:     0 2px 5px rgba(0,0,0,.08);
+    --shadow-md:     0 4px 12px rgba(0,0,0,.12);
+    --shadow-lg:     0 8px 24px rgba(0,0,0,.16);
+    --font:          'Inter', 'Amazon Ember', Arial, sans-serif;
+  }
+
+  body { font-family: var(--font); background: var(--bg-light); color: var(--text-primary); font-size: 14px; }
+  a { text-decoration: none; color: inherit; }
+
+  /* ── HEADER ──────────────────────────────── */
+  header {
+    background: var(--amazon-dark);
+    position: sticky; top: 0; z-index: 1000;
+  }
+  .nav-top {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; max-width: 1500px; margin: 0 auto;
+  }
+  .logo { display: flex; align-items: center; gap: 2px; padding: 8px 10px; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; }
+  .logo:hover { border-color: white; }
+  .logo-text { color: white; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--amazon-orange); }
+  .logo-dot { color: var(--amazon-orange); font-size: 28px; margin-top: -4px; }
+
+  .deliver {
+    padding: 4px 8px; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; color: #ccc; min-width: 110px;
+  }
+  .deliver:hover { border-color: white; }
+  .deliver small { display: block; font-size: 11px; }
+  .deliver strong { color: white; font-size: 13px; }
+
+  .search-bar {
+    flex: 1; display: flex; border-radius: var(--radius-sm); overflow: hidden; height: 40px;
+    box-shadow: 0 0 0 2px var(--amazon-orange);
+  }
+  .search-bar select {
+    background: #F3F3F3; border: none; border-right: 1px solid #ccc;
+    padding: 0 8px; font-size: 12px; cursor: pointer; color: #333; min-width: 56px;
+    appearance: none; -webkit-appearance: none;
+  }
+  .search-bar input {
+    flex: 1; border: none; outline: none; padding: 0 12px; font-size: 15px; background: white;
+  }
+  .search-bar button {
+    background: var(--amazon-orange); border: none; width: 46px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .search-bar button:hover { background: #e68900; }
+  .search-bar button svg { width: 20px; height: 20px; fill: var(--amazon-dark); }
+
+  .nav-icons { display: flex; gap: 2px; margin-left: 4px; }
+  .nav-icon { padding: 5px 9px; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; color: #ccc; white-space: nowrap; }
+  .nav-icon:hover { border-color: white; color: white; }
+  .nav-icon small { display: block; font-size: 11px; }
+  .nav-icon strong { color: white; font-size: 13px; }
+  .cart-icon { display: flex; align-items: center; gap: 4px; }
+  .cart-count { background: var(--amazon-orange); color: var(--amazon-dark); font-weight: 700; font-size: 18px; min-width: 24px; text-align: center; border-radius: 4px; padding: 0 4px; }
+
+  /* Sub-nav */
+  .nav-bottom { background: var(--amazon-mid); }
+  .nav-bottom-inner { display: flex; align-items: center; padding: 0 16px; max-width: 1500px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+  .nav-bottom-inner::-webkit-scrollbar { display: none; }
+  .nav-link { padding: 8px 10px; color: white; font-size: 13px; white-space: nowrap; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; }
+  .nav-link:hover { border-color: white; }
+  .nav-link.all { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+  .hamburger { width: 18px; height: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+  .hamburger span { display: block; height: 2px; background: white; border-radius: 2px; }
+
+  /* ── HERO BANNER ─────────────────────────── */
+  .hero {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #1a2637 0%, #232f3e 40%, #1a3a4a 100%);
+    height: 400px;
+  }
+  .hero-content {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    text-align: center; color: white; z-index: 2;
+  }
+  .hero-badge { background: var(--amazon-orange); color: var(--amazon-dark); font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 16px; text-transform: uppercase; }
+  .hero h1 { font-size: 42px; font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
+  .hero h1 em { color: var(--amazon-orange); font-style: normal; }
+  .hero p { font-size: 16px; color: #bbb; margin-bottom: 28px; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; }
+  .btn-primary { background: var(--amazon-yellow); color: var(--amazon-dark); font-weight: 700; padding: 12px 28px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 15px; transition: background .15s, transform .1s; }
+  .btn-primary:hover { background: #f0c800; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: white; font-weight: 600; padding: 12px 28px; border-radius: var(--radius-sm); border: 2px solid rgba(255,255,255,.4); cursor: pointer; font-size: 15px; transition: border-color .15s, transform .1s; }
+  .btn-ghost:hover { border-color: white; transform: translateY(-1px); }
+
+  /* floating circles */
+  .hero-circle { position: absolute; border-radius: 50%; opacity: .06; background: var(--amazon-orange); }
+  .hc1 { width: 400px; height: 400px; top: -100px; right: -80px; }
+  .hc2 { width: 200px; height: 200px; bottom: -60px; left: 5%; }
+  .hc3 { width: 120px; height: 120px; top: 30%; left: 20%; opacity: .04; }
+
+  /* ── MAIN CONTENT ────────────────────────── */
+  .container { max-width: 1500px; margin: 0 auto; padding: 0 16px; }
+
+  /* Grid layout with sidebar + main */
+  .page-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 20px 0; }
+
+  /* ── SIDEBAR ─────────────────────────────── */
+  .sidebar {}
+  .sidebar-card { background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 16px; margin-bottom: 16px; }
+  .sidebar-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .filter-group { margin-bottom: 14px; }
+  .filter-group h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+  .filter-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
+  .filter-item input[type=checkbox] { accent-color: var(--amazon-orange); width: 15px; height: 15px; cursor: pointer; }
+  .filter-item label { font-size: 13px; cursor: pointer; color: var(--text-link); }
+  .filter-item label:hover { text-decoration: underline; color: var(--amazon-red); }
+
+  .price-slider { padding: 4px 0; }
+  .price-slider input[type=range] { width: 100%; accent-color: var(--amazon-orange); }
+  .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  .star-filter { display: flex; flex-direction: column; gap: 4px; }
+  .star-row { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+  .star-row:hover { background: #f0f0f0; }
+  .stars-mini { color: var(--star); font-size: 13px; }
+  .star-row span { font-size: 12px; color: var(--text-link); }
+
+  /* ── PRODUCTS AREA ───────────────────────── */
+  .products-area {}
+  .products-toolbar { display: flex; align-items: center; justify-content: space-between; background: white; padding: 10px 16px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+  .results-count { font-size: 13px; color: var(--text-muted); }
+  .results-count strong { color: var(--text-primary); }
+  .sort-select { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .sort-select select { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 5px 10px; font-size: 13px; cursor: pointer; background: white; }
+
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* ── PRODUCT CARD ────────────────────────── */
+  .product-card {
+    background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);
+    overflow: hidden; cursor: pointer; transition: box-shadow .2s, transform .2s;
+    display: flex; flex-direction: column; position: relative;
+  }
+  .product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+  .badge-ribbon { position: absolute; top: 10px; left: 10px; z-index: 1; }
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; }
+  .badge.sale { background: var(--amazon-red); color: white; }
+  .badge.new { background: var(--amazon-green); color: white; }
+  .badge.prime { background: #00a8e0; color: white; }
+  .badge.hot { background: var(--amazon-orange); color: var(--amazon-dark); }
+
+  .wishlist-btn { position: absolute; top: 10px; right: 10px; z-index: 1; background: white; border: 1px solid var(--border); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: transform .2s; }
+  .wishlist-btn:hover { transform: scale(1.15); }
+
+  .product-img { height: 180px; background: #f7f7f7; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+
+  .product-info { padding: 12px; flex: 1; display: flex; flex-direction: column; }
+  .product-brand { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .product-name { font-size: 13px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; color: var(--text-primary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .product-name:hover { color: var(--amazon-red); }
+
+  .rating { display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+  .stars { color: var(--star); font-size: 13px; }
+  .rating-count { font-size: 12px; color: var(--text-link); }
+  .rating-count:hover { text-decoration: underline; }
+
+  .prime-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; margin-bottom: 6px; }
+  .prime-logo { background: #00a8e0; color: white; font-weight: 900; font-size: 9px; padding: 1px 5px; border-radius: 2px; letter-spacing: .5px; }
+  .prime-text { color: var(--text-muted); }
+
+  .price-block { margin-top: auto; }
+  .price-main { display: flex; align-items: baseline; gap: 4px; }
+  .price-symbol { font-size: 12px; font-weight: 500; vertical-align: top; line-height: 1.8; }
+  .price-int { font-size: 22px; font-weight: 700; line-height: 1; }
+  .price-dec { font-size: 12px; font-weight: 700; vertical-align: top; line-height: 1.5; }
+  .price-original { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-left: 4px; }
+  .price-save { font-size: 12px; color: var(--amazon-red); font-weight: 600; }
+
+  .add-to-cart {
+    width: 100%; margin-top: 10px; padding: 8px; background: var(--amazon-yellow);
+    border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background .15s; color: var(--amazon-dark);
+  }
+  .add-to-cart:hover { background: #f0c800; }
+
+  /* ── DEALS SECTION ───────────────────────── */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-title { font-size: 21px; font-weight: 700; }
+  .see-all { color: var(--text-link); font-size: 13px; cursor: pointer; }
+  .see-all:hover { text-decoration: underline; color: var(--amazon-red); }
+
+  .deals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .deal-card { background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; cursor: pointer; transition: box-shadow .2s; }
+  .deal-card:hover { box-shadow: var(--shadow-md); }
+  .deal-img { width: 100px; min-height: 100px; background: #f7f7f7; display: flex; align-items: center; justify-content: center; font-size: 40px; flex-shrink: 0; }
+  .deal-info { padding: 12px; flex: 1; }
+  .deal-discount { background: var(--amazon-red); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+  .deal-name { font-size: 13px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
+  .deal-price { font-size: 17px; font-weight: 700; }
+  .deal-price-old { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-left: 6px; font-weight: 400; }
+  .deal-progress { margin-top: 8px; }
+  .deal-progress-bar { height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+  .deal-progress-fill { height: 100%; background: var(--amazon-orange); border-radius: 3px; }
+  .deal-progress-text { font-size: 11px; color: var(--amazon-red); font-weight: 600; margin-top: 3px; }
+
+  /* ── CATEGORIES ──────────────────────────── */
+  .category-section { background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: 20px; margin-bottom: 20px; }
+  .cat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .cat-card { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 8px; text-align: center; cursor: pointer; transition: all .2s; }
+  .cat-card:hover { border-color: var(--amazon-orange); box-shadow: 0 0 0 2px rgba(255,153,0,.2); background: #FFFBF0; }
+  .cat-icon { font-size: 28px; margin-bottom: 6px; }
+  .cat-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+
+  /* ── BANNER STRIP ────────────────────────── */
+  .banner-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+  .mini-banner { border-radius: var(--radius-md); padding: 20px; cursor: pointer; transition: opacity .2s; display: flex; flex-direction: column; justify-content: space-between; min-height: 130px; }
+  .mini-banner:hover { opacity: .92; }
+  .mini-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .mini-banner p { font-size: 12px; opacity: .8; }
+  .mini-banner a { margin-top: 10px; font-size: 13px; font-weight: 600; color: inherit; text-decoration: underline; }
+  .mb1 { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; }
+  .mb2 { background: linear-gradient(135deg, #2d5a27, #1e3d14); color: white; }
+  .mb3 { background: linear-gradient(135deg, #7b2d00, #4a1a00); color: white; }
+
+  /* ── BREADCRUMB ──────────────────────────── */
+  .breadcrumb { padding: 10px 0; font-size: 12px; color: var(--text-muted); }
+  .breadcrumb a { color: var(--text-link); cursor: pointer; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { color: var(--text-muted); margin: 0 4px; }
+
+  /* ── FOOTER ──────────────────────────────── */
+  footer { background: var(--amazon-mid); color: white; margin-top: 40px; }
+  .footer-top { background: #37475A; text-align: center; padding: 14px; cursor: pointer; font-size: 13px; }
+  .footer-top:hover { background: #4a5c6f; }
+  .footer-main { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+  .footer-col h4 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .footer-col a { display: block; color: #ccc; font-size: 13px; margin-bottom: 6px; cursor: pointer; }
+  .footer-col a:hover { color: white; }
+  .footer-bottom { background: var(--amazon-dark); text-align: center; padding: 14px; font-size: 12px; color: #888; }
+  .footer-logo { color: white; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .footer-logo span { color: var(--amazon-orange); }
+
+  /* ── TOAST ───────────────────────────────── */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--amazon-dark); color: white; padding: 12px 24px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); transition: transform .3s ease; z-index: 9999; display: flex; align-items: center; gap: 8px; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast-icon { font-size: 18px; }
+
+  /* ── SCROLL TO TOP ───────────────────────── */
+  .scroll-top { position: fixed; bottom: 80px; right: 24px; background: var(--amazon-dark); color: white; border: none; border-radius: var(--radius-md); width: 44px; height: 44px; font-size: 20px; cursor: pointer; box-shadow: var(--shadow-md); opacity: 0; transition: opacity .3s; z-index: 999; }
+  .scroll-top.visible { opacity: 1; }
+  .scroll-top:hover { background: var(--amazon-mid); }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────── -->
+<header>
+  <nav class="nav-top">
+    <div class="logo">
+      <span class="logo-text">amazon<span>.in</span></span>
+    </div>
+
+    <div class="deliver">
+      <small>Deliver to</small>
+      <strong>📍 Mumbai 400001</strong>
+    </div>
+
+    <div class="search-bar">
+      <select title="Category">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Clothing</option>
+        <option>Books</option>
+        <option>Home</option>
+        <option>Sports</option>
+        <option>Toys</option>
+        <option>Beauty</option>
+        <option>Grocery</option>
+      </select>
+      <input type="text" placeholder="Search Amazon.in" id="searchInput">
+      <button title="Search" onclick="handleSearch()">
+        <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#131921" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-icons">
+      <div class="nav-icon">
+        <small>Hello, Sign in</small>
+        <strong>Account &amp; Lists ▾</strong>
+      </div>
+      <div class="nav-icon">
+        <small>Returns</small>
+        <strong>&amp; Orders</strong>
+      </div>
+      <div class="nav-icon cart-icon" onclick="showToast('🛒 Cart opened!')">
+        <span class="cart-count" id="cartCount">3</span>
+        <strong>Cart</strong>
+      </div>
+    </div>
+  </nav>
+
+  <div class="nav-bottom">
+    <div class="nav-bottom-inner">
+      <div class="nav-link all">
+        <div class="hamburger"><span></span><span></span><span></span></div>
+        All
+      </div>
+      <div class="nav-link">Today's Deals</div>
+      <div class="nav-link">Customer Service</div>
+      <div class="nav-link">Registry</div>
+      <div class="nav-link">Gift Cards</div>
+      <div class="nav-link">Sell</div>
+      <div class="nav-link" style="color:var(--amazon-orange); font-weight:600;">Prime</div>
+      <div class="nav-link">New Arrivals</div>
+      <div class="nav-link">Electronics</div>
+      <div class="nav-link">Fashion</div>
+      <div class="nav-link">Home &amp; Kitchen</div>
+      <div class="nav-link">Books</div>
+      <div class="nav-link">Sports</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO BANNER ─────────────────────────── -->
+<div class="hero">
+  <div class="hero-circle hc1"></div>
+  <div class="hero-circle hc2"></div>
+  <div class="hero-circle hc3"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Great Indian Festival Sale</div>
+    <h1>Millions of deals.<br>One great <em>price</em>.</h1>
+    <p>Shop electronics, fashion, books and more — delivered to your door.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showToast('🎉 Exploring deals!')">Shop the Sale</button>
+      <button class="btn-ghost" onclick="showToast('✨ Prime activated!')">Try Prime Free</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ───────────────────────────────── -->
+<div class="container">
+
+  <!-- breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">Home</a><span>›</span>
+    <a href="#">Electronics</a><span>›</span>
+    All Products
+  </div>
+
+  <!-- category pills -->
+  <div class="category-section" style="margin-bottom:20px;">
+    <div class="section-header">
+      <span class="section-title">Shop by Category</span>
+      <span class="see-all">See all departments →</span>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="cat-icon">📱</div><div class="cat-name">Electronics</div></div>
+      <div class="cat-card"><div class="cat-icon">👗</div><div class="cat-name">Fashion</div></div>
+      <div class="cat-card"><div class="cat-icon">🏠</div><div class="cat-name">Home & Kitchen</div></div>
+      <div class="cat-card"><div class="cat-icon">📚</div><div class="cat-name">Books</div></div>
+      <div class="cat-card"><div class="cat-icon">⚽</div><div class="cat-name">Sports</div></div>
+      <div class="cat-card"><div class="cat-icon">🧴</div><div class="cat-name">Beauty</div></div>
+    </div>
+  </div>
+
+  <!-- banner strip -->
+  <div class="banner-strip">
+    <div class="mini-banner mb1">
+      <div>
+        <h3>🎧 Mega Audio Sale</h3>
+        <p>Up to 60% off headphones, earbuds & speakers</p>
+      </div>
+      <a href="#">Shop now →</a>
+    </div>
+    <div class="mini-banner mb2">
+      <div>
+        <h3>🌱 Organic &amp; Natural</h3>
+        <p>Fresh groceries, superfoods & more</p>
+      </div>
+      <a href="#">Shop now →</a>
+    </div>
+    <div class="mini-banner mb3">
+      <div>
+        <h3>📸 Camera Deals</h3>
+        <p>DSLRs, mirrorless & accessories</p>
+      </div>
+      <a href="#">Shop now →</a>
+    </div>
+  </div>
+
+  <!-- Flash Deals -->
+  <div class="section-header"><span class="section-title">⚡ Lightning Deals</span><span class="see-all">See all deals →</span></div>
+  <div class="deals-grid">
+    <div class="deal-card" onclick="showToast('Deal added to cart!')">
+      <div class="deal-img">🎧</div>
+      <div class="deal-info">
+        <span class="deal-discount">55% OFF</span>
+        <div class="deal-name">Sony WH-1000XM5 Noise Cancelling Headphones</div>
+        <div><span class="deal-price">₹17,990</span><span class="deal-price-old">₹39,990</span></div>
+        <div class="deal-progress">
+          <div class="deal-progress-bar"><div class="deal-progress-fill" style="width:72%"></div></div>
+          <div class="deal-progress-text">72% claimed</div>
+        </div>
+      </div>
+    </div>
+    <div class="deal-card" onclick="showToast('Deal added to cart!')">
+      <div class="deal-img">⌚</div>
+      <div class="deal-info">
+        <span class="deal-discount">40% OFF</span>
+        <div class="deal-name">Samsung Galaxy Watch6 Classic 47mm Smartwatch</div>
+        <div><span class="deal-price">₹26,999</span><span class="deal-price-old">₹44,999</span></div>
+        <div class="deal-progress">
+          <div class="deal-progress-bar"><div class="deal-progress-fill" style="width:45%"></div></div>
+          <div class="deal-progress-text">45% claimed</div>
+        </div>
+      </div>
+    </div>
+    <div class="deal-card" onclick="showToast('Deal added to cart!')">
+      <div class="deal-img">📷</div>
+      <div class="deal-info">
+        <span class="deal-discount">30% OFF</span>
+        <div class="deal-name">Canon EOS R50 Mirrorless Camera Kit 18-45mm</div>
+        <div><span class="deal-price">₹54,990</span><span class="deal-price-old">₹78,995</span></div>
+        <div class="deal-progress">
+          <div class="deal-progress-bar"><div class="deal-progress-fill" style="width:88%"></div></div>
+          <div class="deal-progress-text">88% claimed — hurry!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar + Products -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <h3>🔍 Refine Results</h3>
+
+        <div class="filter-group">
+          <h4>Department</h4>
+          <div class="filter-item"><input type="checkbox" id="d1" checked><label for="d1">Electronics</label></div>
+          <div class="filter-item"><input type="checkbox" id="d2"><label for="d2">Computers</label></div>
+          <div class="filter-item"><input type="checkbox" id="d3"><label for="d3">Cameras</label></div>
+          <div class="filter-item"><input type="checkbox" id="d4"><label for="d4">Audio</label></div>
+          <div class="filter-item"><input type="checkbox" id="d5"><label for="d5">Smart Home</label></div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Customer Reviews</h4>
+          <div class="star-filter">
+            <div class="star-row"><span class="stars-mini">★★★★★</span><span>& Up (2,341)</span></div>
+            <div class="star-row"><span class="stars-mini">★★★★☆</span><span>& Up (5,102)</span></div>
+            <div class="star-row"><span class="stars-mini">★★★☆☆</span><span>& Up (8,445)</span></div>
+            <div class="star-row"><span class="stars-mini">★★☆☆☆</span><span>& Up (10,210)</span></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <div class="price-slider">
+            <input type="range" min="0" max="200000" value="80000" oninput="updatePrice(this.value)">
+            <div class="price-labels"><span>₹0</span><span id="priceMax">₹80,000</span></div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Brand</h4>
+          <div class="filter-item"><input type="checkbox" id="b1" checked><label for="b1">Samsung</label></div>
+          <div class="filter-item"><input type="checkbox" id="b2" checked><label for="b2">Apple</label></div>
+          <div class="filter-item"><input type="checkbox" id="b3"><label for="b3">Sony</label></div>
+          <div class="filter-item"><input type="checkbox" id="b4"><label for="b4">OnePlus</label></div>
+          <div class="filter-item"><input type="checkbox" id="b5"><label for="b5">Xiaomi</label></div>
+          <div class="filter-item"><input type="checkbox" id="b6"><label for="b6">Bose</label></div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Availability</h4>
+          <div class="filter-item"><input type="checkbox" id="avail1" checked><label for="avail1">In Stock</label></div>
+          <div class="filter-item"><input type="checkbox" id="prime1"><label for="prime1">Prime Eligible</label></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Products -->
+    <div class="products-area">
+      <div class="products-toolbar">
+        <div class="results-count">Showing <strong>1–24</strong> of <strong>12,847</strong> results for <strong>"electronics"</strong></div>
+        <div class="sort-select">
+          <label for="sort">Sort by:</label>
+          <select id="sort">
+            <option>Featured</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Avg. Customer Review</option>
+            <option>Newest Arrivals</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────── -->
+<footer>
+  <div class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</div>
+  <div class="footer-main">
+    <div class="footer-col">
+      <h4>Get to Know Us</h4>
+      <a href="#">Careers</a>
+      <a href="#">Blog</a>
+      <a href="#">About Amazon</a>
+      <a href="#">Investor Relations</a>
+      <a href="#">Amazon Devices</a>
+      <a href="#">Amazon Science</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a href="#">Sell on Amazon</a>
+      <a href="#">Sell under Amazon Accelerator</a>
+      <a href="#">Amazon Associates</a>
+      <a href="#">Fulfillment by Amazon</a>
+      <a href="#">Advertise Your Products</a>
+    </div>
+    <div class="footer-col">
+      <h4>Amazon Payment Products</h4>
+      <a href="#">Amazon Business Card</a>
+      <a href="#">Shop with Points</a>
+      <a href="#">Reload Your Balance</a>
+      <a href="#">Amazon Currency Converter</a>
+    </div>
+    <div class="footer-col">
+      <h4>Let Us Help You</h4>
+      <a href="#">COVID-19 and Amazon</a>
+      <a href="#">Your Account</a>
+      <a href="#">Your Orders</a>
+      <a href="#">Shipping Rates & Policies</a>
+      <a href="#">Returns & Replacements</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-logo">amazon<span>.in</span></div>
+    <p>© 1996–2026, Amazon.com, Inc. or its affiliates · Privacy · Conditions of Use · Interest-Based Ads</p>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Added to cart!</span></div>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  /* ── Product Data ── */
+  const products = [
+    { emoji:'📱', brand:'Samsung', name:'Galaxy S24 Ultra 5G (256GB, Titanium Black)', price:129999, original:149999, rating:4.7, reviews:4820, badge:'new', prime:true },
+    { emoji:'🍎', brand:'Apple', name:'iPhone 15 Pro Max 256GB Natural Titanium', price:159900, original:179900, rating:4.8, reviews:7231, badge:'hot', prime:true },
+    { emoji:'💻', brand:'Apple', name:'MacBook Air 15" M3 Chip 8GB 256GB SSD Space Grey', price:134900, original:149900, rating:4.9, reviews:3120, badge:'sale', prime:true },
+    { emoji:'🎧', brand:'Sony', name:'WH-1000XM5 Noise Cancelling Wireless Headphones', price:17990, original:39990, rating:4.6, reviews:9450, badge:'sale', prime:true },
+    { emoji:'📷', brand:'Canon', name:'EOS R50 Mirrorless Camera with 18-45mm Kit Lens', price:54990, original:78995, rating:4.5, reviews:1820, badge:'', prime:false },
+    { emoji:'⌚', brand:'Samsung', name:'Galaxy Watch6 Classic 47mm LTE Smartwatch', price:26999, original:44999, rating:4.4, reviews:2340, badge:'sale', prime:true },
+    { emoji:'🖥️', brand:'LG', name:'27" UltraGear 4K IPS 1ms 144Hz Gaming Monitor', price:34990, original:49990, rating:4.6, reviews:870, badge:'', prime:true },
+    { emoji:'🎮', brand:'Sony', name:'PlayStation 5 Disc Edition Console + Extra Controller', price:54990, original:59990, rating:4.8, reviews:12300, badge:'hot', prime:true },
+    { emoji:'🔈', brand:'Bose', name:'SoundLink Max Portable Bluetooth Speaker', price:29900, original:35900, rating:4.5, reviews:990, badge:'new', prime:true },
+    { emoji:'📟', brand:'Xiaomi', name:'Pad 6 Pro 12.4" 8GB+256GB 144Hz Tablet Silver', price:27999, original:34999, rating:4.3, reviews:1450, badge:'', prime:false },
+    { emoji:'🖱️', brand:'Logitech', name:'MX Master 3S Wireless Performance Mouse Graphite', price:9995, original:13495, rating:4.7, reviews:5670, badge:'sale', prime:true },
+    { emoji:'⌨️', brand:'Keychron', name:'Q3 Max QMK Wireless Mechanical Keyboard Brown', price:16499, original:18999, rating:4.6, reviews:780, badge:'new', prime:false },
+  ];
+
+  const wishlist = new Set();
+  let cartCount = 3;
+
+  function stars(r) {
+    const full = Math.floor(r), half = r % 1 >= 0.5;
+    return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half?1:0));
+  }
+
+  function formatPrice(p) {
+    return p.toLocaleString('en-IN');
+  }
+
+  function discount(p, o) { return Math.round((1 - p/o)*100); }
+
+  function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card" onclick="addToCart(${i})">
+        ${p.badge ? `<div class="badge-ribbon"><span class="badge ${p.badge}">${p.badge === 'sale' ? discount(p.price,p.original)+'% off' : p.badge}</span></div>` : ''}
+        <div class="wishlist-btn" onclick="toggleWish(event,${i})" id="wish${i}">🤍</div>
+        <div class="product-img">${p.emoji}</div>
+        <div class="product-info">
+          <div class="product-brand">${p.brand}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="rating">
+            <span class="stars">${stars(p.rating)}</span>
+            <span class="rating-count">(${p.reviews.toLocaleString('en-IN')})</span>
+          </div>
+          ${p.prime ? `<div class="prime-badge"><span class="prime-logo">prime</span><span class="prime-text">FREE delivery by tomorrow</span></div>` : ''}
+          <div class="price-block">
+            <div class="price-main">
+              <span class="price-symbol">₹</span>
+              <span class="price-int">${Math.floor(p.price/100).toLocaleString('en-IN')},</span>
+              <span class="price-dec">${String(p.price).slice(-2)}</span>
+              <span class="price-original">M.R.P: ₹${formatPrice(p.original)}</span>
+            </div>
+            <span class="price-save">You save ₹${formatPrice(p.original - p.price)} (${discount(p.price, p.original)}%)</span>
+          </div>
+          <button class="add-to-cart" onclick="addToCart(${i}); event.stopPropagation()">🛒 Add to Cart</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addToCart(i) {
+    cartCount++;
+    document.getElementById('cartCount').textContent = cartCount;
+    showToast(`🛒 "${products[i].name.split(' ').slice(0,4).join(' ')}..." added to cart!`);
+  }
+
+  function toggleWish(e, i) {
+    e.stopPropagation();
+    const btn = document.getElementById('wish'+i);
+    if (wishlist.has(i)) {
+      wishlist.delete(i);
+      btn.textContent = '🤍';
+      showToast('Removed from Wish List');
+    } else {
+      wishlist.add(i);
+      btn.textContent = '❤️';
+      showToast('💖 Saved to Wish List!');
+    }
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function updatePrice(val) {
+    document.getElementById('priceMax').textContent = '₹' + Number(val).toLocaleString('en-IN');
+  }
+
+  function handleSearch() {
+    const q = document.getElementById('searchInput').value;
+    showToast(q ? `🔍 Searching for "${q}"...` : '🔍 Please enter a search term');
+  }
+
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // Scroll to top button
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+  renderProducts();
+</script>
+</body>
+</html>
