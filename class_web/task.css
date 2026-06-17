@@ -1,0 +1,42 @@
+body{
+    background-color: rgb(199, 77, 108),white;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.demo{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    padding: 20px;
+}
+
+.card{
+    background-color: #ded4d4;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card img{
+    width: 100%;
+    border-radius: 10px;
+}
+
+button{
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:first-of-type{
+    background-color: rgb(163, 159, 163);
+    color: white;
+}
+
+button:last-of-type{
+    background-color: gray;
+    color: white;
+}

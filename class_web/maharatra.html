@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maharashtra Information</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        button{
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #maharashtra{
+            margin-top: 800px;
+            padding: 20px;
+        }
+
+        img{
+            width: 500px;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        p{
+            max-width: 800px;
+            margin: auto;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to Maharashtra</h1>
+
+    <button onclick="scrollDown()">Scroll Down ↓</button>
+
+    <div id="maharashtra">
+        <h2>Maharashtra</h2>
+
+        <img src=""
+             alt="Gateway of India">
+
+        <p>
+            Maharashtra is one of the largest and most developed states in India.
+            Its capital is Mumbai, which is known as the financial capital of India.
+            Maharashtra is famous for its rich history, culture, forts, beaches,
+            and tourist attractions such as the Gateway of India, Ajanta Caves,
+            Ellora Caves, and Shirdi.
+            <br><br>
+            The official language of Maharashtra is Marathi.
+            Chhatrapati Shivaji Maharaj is one of the most respected historical
+            figures associated with Maharashtra.
+        </p>
+
+        <button onclick="scrollUp()">Scroll Up ↑</button>
+    </div>
+
+    <script>
+        function scrollDown() {
+            document.getElementById("maharashtra").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function scrollUp() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    </script>
+
+</body>
+</html>
